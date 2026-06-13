@@ -99,6 +99,7 @@ namespace PubliiTool
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "sqlite (*.db, *.sqlite)|*.db;*.sqlite";
             if (ofd.ShowDialog() != DialogResult.OK)
                 return;
 

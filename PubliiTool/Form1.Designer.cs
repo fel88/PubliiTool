@@ -37,6 +37,7 @@
             columnHeader5 = new ColumnHeader();
             contextMenuStrip1 = new ContextMenuStrip(components);
             updateSelectedInDbToolStripMenuItem = new ToolStripMenuItem();
+            updateBreadcrumbsForSelectedToolStripMenuItem = new ToolStripMenuItem();
             richTextBox1 = new RichTextBox();
             toolStrip1 = new ToolStrip();
             toolStripButton1 = new ToolStripButton();
@@ -44,7 +45,6 @@
             toolStripButton3 = new ToolStripButton();
             tableLayoutPanel1 = new TableLayoutPanel();
             textBox1 = new TextBox();
-            updateBreadcrumbsForSelectedToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -66,11 +66,31 @@
             listView1.View = View.Details;
             listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
             // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "Id";
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "Title";
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "Slug";
+            // 
+            // columnHeader4
+            // 
+            columnHeader4.Text = "Text";
+            // 
+            // columnHeader5
+            // 
+            columnHeader5.Text = "Parent";
+            // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { updateSelectedInDbToolStripMenuItem, updateBreadcrumbsForSelectedToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(249, 70);
+            contextMenuStrip1.Size = new Size(249, 48);
             // 
             // updateSelectedInDbToolStripMenuItem
             // 
@@ -79,6 +99,14 @@
             updateSelectedInDbToolStripMenuItem.Size = new Size(248, 22);
             updateSelectedInDbToolStripMenuItem.Text = "update selected in db";
             updateSelectedInDbToolStripMenuItem.Click += updateSelectedInDbToolStripMenuItem_Click;
+            // 
+            // updateBreadcrumbsForSelectedToolStripMenuItem
+            // 
+            updateBreadcrumbsForSelectedToolStripMenuItem.Image = Properties.Resources.tag_hash;
+            updateBreadcrumbsForSelectedToolStripMenuItem.Name = "updateBreadcrumbsForSelectedToolStripMenuItem";
+            updateBreadcrumbsForSelectedToolStripMenuItem.Size = new Size(248, 22);
+            updateBreadcrumbsForSelectedToolStripMenuItem.Text = "update breadcrumbs for selected";
+            updateBreadcrumbsForSelectedToolStripMenuItem.Click += updateBreadcrumbsForSelectedToolStripMenuItem_Click;
             // 
             // richTextBox1
             // 
@@ -149,14 +177,6 @@
             textBox1.Size = new Size(433, 23);
             textBox1.TabIndex = 5;
             textBox1.TextChanged += textBox1_TextChanged;
-            // 
-            // updateBreadcrumbsForSelectedToolStripMenuItem
-            // 
-            updateBreadcrumbsForSelectedToolStripMenuItem.Image = Properties.Resources.tag_hash;
-            updateBreadcrumbsForSelectedToolStripMenuItem.Name = "updateBreadcrumbsForSelectedToolStripMenuItem";
-            updateBreadcrumbsForSelectedToolStripMenuItem.Size = new Size(248, 22);
-            updateBreadcrumbsForSelectedToolStripMenuItem.Text = "update breadcrumbs for selected";
-            updateBreadcrumbsForSelectedToolStripMenuItem.Click += updateBreadcrumbsForSelectedToolStripMenuItem_Click;
             // 
             // Form1
             // 
