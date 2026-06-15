@@ -11,5 +11,6 @@ namespace PubliiTool
         public string Text { get; set; }
         public string Title;
         public Post Parent;
+        public bool Synced = true;
     }
 }

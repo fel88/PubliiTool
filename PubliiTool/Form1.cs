@@ -4,6 +4,7 @@ using Dapper.Contrib.Extensions;
 using HtmlAgilityPack;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualBasic.ApplicationServices;
+using System.Linq.Expressions;
 using System.Reflection.Emit;
 using System.Text;
 using System.Text.Json;
@@ -52,7 +53,12 @@ namespace PubliiTool
                     if (!item.Title.Contains(filter, StringComparison.OrdinalIgnoreCase))
                         continue;
                 }
-                listView1.Items.Add(new ListViewItem(new string[] { item.Id.ToString(), item.Title, item.Slug, item.Text, item.Parent != null ? (item.Parent.Id + " (" + item.Parent.Title + ")") : "" }) { Tag = item });
+                var lvi = new ListViewItem(new string[] { item.Id.ToString(), item.Title, item.Slug, item.Text, item.Parent != null ? (item.Parent.Id + " (" + item.Parent.Title + ")") : "" }) { Tag = item };
+                if (!item.Synced)
+                {
+                    lvi.BackColor = Color.Yellow;
+                }
+                listView1.Items.Add(lvi);
             }
         }
 
@@ -110,13 +116,20 @@ namespace PubliiTool
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
+            var d = AutoDialog.DialogHelpers.StartDialog();
+            d.AddBoolField("onlyUpdate", "Only update");
+
+            if (!d.ShowDialog())
+                return;
+
             foreach (var item in posts)
             {
-                UpdateBreadcrumbs(item);
+                UpdateBreadcrumbs(item, d.GetBoolField("onlyUpdate"));
             }
+            UpdatePostsList();
         }
 
-        public void UpdateBreadcrumbs(Post item)
+        public void UpdateBreadcrumbs(Post item, bool onlyUpdate = false)
         {
             var p = item.Parent;
             List<string> links = new List<string>();
@@ -137,21 +150,32 @@ namespace PubliiTool
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(item.Text);
             // 3. Check if the document loaded correctly
+            bool update = false;
+            
+            var after = item.Text;
             if (doc.DocumentNode != null)
             {
                 var nodes = doc.DocumentNode.SelectNodes("//div[@class='breadcrumbs']");
                 if (nodes != null && nodes.Any())
                 {
+                    update = true;
                     foreach (var node in nodes)
                     {
                         node.ParentNode.RemoveChild(node);
                     }
-                    item.Text = doc.DocumentNode.OuterHtml;
+                    after = doc.DocumentNode.OuterHtml;                    
                 }
             }
 
-
-            item.Text = item.Text.Insert(0, join);
+            if (!onlyUpdate || (onlyUpdate && update))
+            {
+                after = after.Insert(0, join);
+                if (item.Text != after)
+                {
+                    item.Text = after;
+                    item.Synced = false;
+                }
+            }
 
         }
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -159,15 +183,26 @@ namespace PubliiTool
             if (MessageBox.Show($"Are you sure to update {dbPath}?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
 
-            using var con = new SqliteConnection("Data Source=" + dbPath);
+            var d = AutoDialog.DialogHelpers.StartDialog();
+            d.AddOptionsField("mode", "Update mode", ["All", "Changes only"], 0);
 
-            //SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_sqlite3());
+            if (!d.ShowDialog())
+                return;
+
+            var modeIdx = d.GetOptionsFieldIdx("mode");
+            using var con = new SqliteConnection("Data Source=" + dbPath);
+            
             con.Open();
             foreach (var item in posts)
             {
+                if (modeIdx == 1 && item.Synced)
+                    continue;
+
                 con.Update<Post>(item);
+                item.Synced = true;
             }
 
+            UpdatePostsList();
         }
 
         private void updateSelectedInDbToolStripMenuItem_Click(object sender, EventArgs e)
@@ -187,7 +222,11 @@ namespace PubliiTool
                 var item = listView1.SelectedItems[i].Tag as Post;
 
                 con.Update<Post>(item);
+                item.Synced = true;
             }
+
+
+            UpdatePostsList();
         }
 
         string filter = "";
@@ -201,7 +240,7 @@ namespace PubliiTool
         {
             if (listView1.SelectedItems.Count == 0)
                 return;
-                        
+
 
             for (int i = 0; i < listView1.SelectedItems.Count; i++)
             {
