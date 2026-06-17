@@ -112,6 +112,9 @@ namespace PubliiTool
             dbPath = ofd.FileName;
             pagesJsonPath = Path.Combine(Path.GetDirectoryName(dbPath), "config", "pages.config.json");
             load();
+            Text = $"PubliiTool: {dbPath}";
+
+            toolStripButton4.Enabled = true;
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
@@ -151,7 +154,7 @@ namespace PubliiTool
             doc.LoadHtml(item.Text);
             // 3. Check if the document loaded correctly
             bool update = false;
-            
+
             var after = item.Text;
             if (doc.DocumentNode != null)
             {
@@ -163,7 +166,7 @@ namespace PubliiTool
                     {
                         node.ParentNode.RemoveChild(node);
                     }
-                    after = doc.DocumentNode.OuterHtml;                    
+                    after = doc.DocumentNode.OuterHtml;
                 }
             }
 
@@ -191,7 +194,7 @@ namespace PubliiTool
 
             var modeIdx = d.GetOptionsFieldIdx("mode");
             using var con = new SqliteConnection("Data Source=" + dbPath);
-            
+
             con.Open();
             foreach (var item in posts)
             {
@@ -247,6 +250,14 @@ namespace PubliiTool
                 var item = listView1.SelectedItems[i].Tag as Post;
                 UpdateBreadcrumbs(item);
             }
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(dbPath))
+                return;
+
+            load();
         }
     }
 }

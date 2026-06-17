@@ -43,6 +43,7 @@
             toolStripButton1 = new ToolStripButton();
             toolStripButton2 = new ToolStripButton();
             toolStripButton3 = new ToolStripButton();
+            toolStripButton4 = new ToolStripButton();
             tableLayoutPanel1 = new TableLayoutPanel();
             textBox1 = new TextBox();
             contextMenuStrip1.SuspendLayout();
@@ -90,14 +91,14 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { updateSelectedInDbToolStripMenuItem, updateBreadcrumbsForSelectedToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(249, 48);
+            contextMenuStrip1.Size = new Size(249, 70);
             // 
             // updateSelectedInDbToolStripMenuItem
             // 
             updateSelectedInDbToolStripMenuItem.Image = Properties.Resources.disk;
             updateSelectedInDbToolStripMenuItem.Name = "updateSelectedInDbToolStripMenuItem";
             updateSelectedInDbToolStripMenuItem.Size = new Size(248, 22);
-            updateSelectedInDbToolStripMenuItem.Text = "update selected in db";
+            updateSelectedInDbToolStripMenuItem.Text = "save selected to db";
             updateSelectedInDbToolStripMenuItem.Click += updateSelectedInDbToolStripMenuItem_Click;
             // 
             // updateBreadcrumbsForSelectedToolStripMenuItem
@@ -119,7 +120,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3, toolStripButton4 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(800, 25);
@@ -152,6 +153,16 @@
             toolStripButton3.Size = new Size(140, 22);
             toolStripButton3.Text = "update breadcrumbs ";
             toolStripButton3.Click += toolStripButton3_Click;
+            // 
+            // toolStripButton4
+            // 
+            toolStripButton4.Enabled = false;
+            toolStripButton4.Image = Properties.Resources.arrow_circle_double_135;
+            toolStripButton4.ImageTransparentColor = Color.Magenta;
+            toolStripButton4.Name = "toolStripButton4";
+            toolStripButton4.Size = new Size(77, 22);
+            toolStripButton4.Text = "reload db";
+            toolStripButton4.Click += toolStripButton4_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -214,5 +225,6 @@
         private ToolStripMenuItem updateSelectedInDbToolStripMenuItem;
         private TextBox textBox1;
         private ToolStripMenuItem updateBreadcrumbsForSelectedToolStripMenuItem;
+        private ToolStripButton toolStripButton4;
     }
 }
